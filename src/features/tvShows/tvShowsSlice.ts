@@ -1,12 +1,13 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { searchShows, singleSearchShow } from "../../services/tvMazeService";
-import { Episode, Show } from "../../types/types";
 import axios from "axios";
 import { RootState } from "../store";
+import { Show, Episode, ShowSearchResult } from "../../types/types";
+
+const API_URL = process.env.REACT_APP_API_URL || "https://api.tvmaze.com/";
 
 interface TvShowsState {
-  shows: Show[];
-  show: Show | null;
+  shows: ShowSearchResult[];
+  selectedShow: Show | null;
   episodes: Episode[];
   status: "idle" | "loading" | "succeeded" | "failed";
   error: string | null;
@@ -14,17 +15,18 @@ interface TvShowsState {
 
 const initialState: TvShowsState = {
   shows: [],
-  show: null,
+  selectedShow: null,
   episodes: [],
   status: "idle",
   error: null,
 };
 
-export const fetchShows = createAsyncThunk<Show[], string>(
+export const fetchShows = createAsyncThunk<ShowSearchResult[], string>(
   "tvShows/fetchShows",
   async (query: string, { rejectWithValue }) => {
     try {
-      return await searchShows(query);
+      const response = await axios.get(`${API_URL}search/shows?q=${query}`);
+      return response.data;
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {
         return rejectWithValue({
@@ -33,23 +35,21 @@ export const fetchShows = createAsyncThunk<Show[], string>(
         });
       }
       return rejectWithValue({
-        message: axios.isAxiosError(error)
-          ? error.message
-          : "An unknown error occurred",
-        status:
-          axios.isAxiosError(error) && error.response
-            ? error.response.status
-            : null,
+        message: "An unknown error occurred",
+        status: null,
       });
     }
   },
 );
 
-export const fetchSingleShow = createAsyncThunk(
+export const fetchSingleShow = createAsyncThunk<Show, string>(
   "tvShows/fetchSingleShow",
   async (query: string, { rejectWithValue }) => {
     try {
-      return await singleSearchShow(query);
+      const response = await axios.get(
+        `${API_URL}singlesearch/shows?q=${query}`,
+      );
+      return response.data;
     } catch (error) {
       return rejectWithValue(error);
     }
@@ -71,9 +71,24 @@ export const tvShowsSlice = createSlice({
       })
       .addCase(fetchShows.rejected, (state, action) => {
         state.status = "failed";
-        state.error = action.payload as string;
+        state.error = action.error?.message || "Failed to fetch shows";
+      })
+      .addCase(fetchSingleShow.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(fetchSingleShow.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.selectedShow = action.payload;
+      })
+      .addCase(fetchSingleShow.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error?.message || "Failed to fetch single show";
       });
   },
 });
+
 export const selectTvShows = (state: RootState) => state.tvShows.shows;
+export const selectSelectedShow = (state: RootState) =>
+  state.tvShows.selectedShow;
+
 export default tvShowsSlice.reducer;
