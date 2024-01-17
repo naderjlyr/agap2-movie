@@ -2,22 +2,30 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { AxiosError } from "axios";
 import { RootState } from "../store";
 import { Show, Episode, ShowSearchResult } from "../../types/types";
-import { getShowDetails, searchShows } from "../../services/tvMazeService";
+import {
+  fetchTvShowBackgroundImageUrl,
+  getShowDetails,
+  searchShows,
+} from "../../services/tvMazeService";
 
 interface TvShowsState {
   shows: ShowSearchResult[];
   selectedShow: Show | null;
   episodes: Episode[];
+  backgroundImages: Record<number, string | undefined>;
   status: "idle" | "loading" | "succeeded" | "failed";
   error: string | null;
+  isDarkMode: boolean;
 }
 
 const initialState: TvShowsState = {
   shows: [],
   selectedShow: null,
   episodes: [],
+  backgroundImages: {},
   status: "idle",
   error: null,
+  isDarkMode: false,
 };
 
 export const fetchShows = createAsyncThunk<ShowSearchResult[], string>(
@@ -40,12 +48,24 @@ export const fetchShows = createAsyncThunk<ShowSearchResult[], string>(
   },
 );
 
-export const fetchSingleShow = createAsyncThunk<Show, string>(
+export const fetchSingleShow = createAsyncThunk<Show, string | number>(
   "tvShows/fetchSingleShow",
-  async (query: string, { rejectWithValue }) => {
+  async (showIdentifier, { rejectWithValue }) => {
     try {
-      return await getShowDetails(query);
+      let showDetails;
+      if (typeof showIdentifier === "number") {
+        showDetails = await getShowDetails(showIdentifier);
+      } else {
+        const searchResults = await searchShows(showIdentifier);
+        if (searchResults.length === 0) throw new Error("No shows found");
+        showDetails = searchResults[0].show;
+      }
+      const backgroundImageUrl = await fetchTvShowBackgroundImageUrl(
+        showDetails.id,
+      );
+      return { ...showDetails, backgroundImageUrl };
     } catch (error) {
+      console.error("Error fetching show details or background image:", error);
       return rejectWithValue(error);
     }
   },
@@ -54,7 +74,11 @@ export const fetchSingleShow = createAsyncThunk<Show, string>(
 export const tvShowsSlice = createSlice({
   name: "tvShows",
   initialState,
-  reducers: {},
+  reducers: {
+    toggleDarkMode: (state) => {
+      state.isDarkMode = !state.isDarkMode;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchShows.pending, (state) => {
@@ -85,7 +109,6 @@ export const tvShowsSlice = createSlice({
       });
   },
 });
-
 export const selectTvShows = (state: RootState) => state.tvShows.shows;
 
 export const selectSelectedShow = (state: RootState) =>

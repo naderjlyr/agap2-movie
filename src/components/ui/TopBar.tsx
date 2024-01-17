@@ -1,26 +1,47 @@
-import { IoPartlySunnyOutline } from "react-icons/io5";
-import { FC } from "react";
+import React, { FC, useState, useEffect } from "react";
+import { FaHome, FaInfoCircle, FaMoon, FaSun } from "react-icons/fa";
 
-interface TopBarProps {
-  time?: string;
-  date?: string;
-  temperature: string;
-  username: string;
-}
+const TopBar: FC = () => {
+  const [isDarkMode, setIsDarkMode] = useState(false);
 
-const TopBar: FC<TopBarProps> = ({ time, date, temperature, username }) => {
+  useEffect(() => {
+    const savedMode = localStorage.getItem("darkMode") === "true";
+    setIsDarkMode(savedMode);
+  }, []);
+
+  const toggleDarkMode = () => {
+    const newMode = !isDarkMode;
+    setIsDarkMode(newMode);
+    localStorage.setItem("darkMode", JSON.stringify(newMode));
+
+    if (newMode) {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+  };
+
   return (
-    <div className="bg-transparent text-white py-4 px-6 flex justify-between items-center">
-      <div className="flex items-center space-x-4">
-        <span className="font-bold text-lg">{time}</span>
-        <span>{date}</span>
+    <nav className="flex items-center justify-between bg-gray-800 p-4 text-white">
+      <div className="logo">Logo</div>
+      <div className="navigation flex items-center">
+        <a href="/" className="flex items-center mx-2">
+          <FaHome className="mr-1" /> Home
+        </a>
+        <a href="/about" className="flex items-center mx-2">
+          <FaInfoCircle className="mr-1" /> About
+        </a>
+        {/* Toggle icon for dark mode */}
+        <button onClick={toggleDarkMode} className="flex items-center mx-2">
+          {isDarkMode ? (
+            <FaSun className="mr-1" />
+          ) : (
+            <FaMoon className="mr-1" />
+          )}
+          Dark Mode
+        </button>
       </div>
-      <div className="flex items-center space-x-4">
-        <IoPartlySunnyOutline />
-        <span>{temperature}</span>
-        <span>{username}</span>
-      </div>
-    </div>
+    </nav>
   );
 };
 

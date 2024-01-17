@@ -10,11 +10,26 @@ export interface Show {
   rating: Rating;
   image: Image;
   summary: string;
+  backgroundImageUrl?: string;
   _embedded?: {
     episodes: Episode[];
   };
 }
+export interface ShowImageType {
+  id: number;
+  type: string;
+  main: boolean;
+  resolutions: {
+    original: ImageResolution;
+    medium?: ImageResolution;
+  };
+}
 
+export interface ImageResolution {
+  url: string;
+  width: number;
+  height: number;
+}
 export interface Schedule {
   time: string;
   days: string[];

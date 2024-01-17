@@ -1,19 +1,19 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-
-import "./App.css";
 import Home from "./pages/Home";
 import ShowDetails from "./pages/ShowDetails/ShowDetails";
+import TopBar from "./components/ui/TopBar";
 
 function App() {
   return (
-    <div className="flex item-center justify-center text-center">
-      <Router>
+    <Router>
+      <TopBar />
+      <div className="flex items-center justify-center text-center">
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/counter" element={<ShowDetails />} />
+          <Route path="/tvshows/:id/:name" element={<ShowDetails />} />
         </Routes>
-      </Router>
-    </div>
+      </div>
+    </Router>
   );
 }
 

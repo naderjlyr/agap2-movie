@@ -1,7 +1,6 @@
 import { useEffect, useMemo } from "react";
 import {
   fetchSingleShow,
-  fetchShows,
   selectSelectedShow,
   selectTvShows,
   selectTvShowsError,
@@ -15,15 +14,12 @@ const useTvShows = (showIdentifier: string | number) => {
 
   const shows = useAppSelector(selectTvShows);
   const selectedShow = useAppSelector(selectSelectedShow);
+
   const error = useAppSelector(selectTvShowsError);
   const status = useAppSelector(selectTvShowsSearchStatus);
 
   useEffect(() => {
-    if (typeof showIdentifier === "number") {
-      dispatch(fetchSingleShow(showIdentifier.toString()));
-    } else if (showIdentifier.trim() !== "") {
-      dispatch(fetchShows(showIdentifier));
-    }
+    dispatch(fetchSingleShow(showIdentifier));
   }, [dispatch, showIdentifier]);
 
   const highestScoredShow = useMemo(() => {
