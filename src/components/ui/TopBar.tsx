@@ -2,8 +2,8 @@ import { IoPartlySunnyOutline } from "react-icons/io5";
 import { FC } from "react";
 
 interface TopBarProps {
-  time: string;
-  date: string;
+  time?: string;
+  date?: string;
   temperature: string;
   username: string;
 }

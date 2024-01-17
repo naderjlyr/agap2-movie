@@ -1,9 +1,8 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import axios from "axios";
+import { AxiosError } from "axios";
 import { RootState } from "../store";
 import { Show, Episode, ShowSearchResult } from "../../types/types";
-
-const API_URL = process.env.REACT_APP_API_URL || "https://api.tvmaze.com/";
+import { getShowDetails, searchShows } from "../../services/tvMazeService";
 
 interface TvShowsState {
   shows: ShowSearchResult[];
@@ -25,10 +24,9 @@ export const fetchShows = createAsyncThunk<ShowSearchResult[], string>(
   "tvShows/fetchShows",
   async (query: string, { rejectWithValue }) => {
     try {
-      const response = await axios.get(`${API_URL}search/shows?q=${query}`);
-      return response.data;
+      return await searchShows(query);
     } catch (error) {
-      if (axios.isAxiosError(error) && error.response) {
+      if (error instanceof AxiosError && error.response) {
         return rejectWithValue({
           message: error.message,
           status: error.response.status,
@@ -46,10 +44,7 @@ export const fetchSingleShow = createAsyncThunk<Show, string>(
   "tvShows/fetchSingleShow",
   async (query: string, { rejectWithValue }) => {
     try {
-      const response = await axios.get(
-        `${API_URL}singlesearch/shows?q=${query}`,
-      );
-      return response.data;
+      return await getShowDetails(query);
     } catch (error) {
       return rejectWithValue(error);
     }
@@ -67,7 +62,11 @@ export const tvShowsSlice = createSlice({
       })
       .addCase(fetchShows.fulfilled, (state, action) => {
         state.status = "succeeded";
-        state.shows = action.payload;
+        if (Array.isArray(action.payload)) {
+          state.shows = action.payload;
+        } else {
+          state.error = "Invalid data format received";
+        }
       })
       .addCase(fetchShows.rejected, (state, action) => {
         state.status = "failed";
@@ -88,7 +87,13 @@ export const tvShowsSlice = createSlice({
 });
 
 export const selectTvShows = (state: RootState) => state.tvShows.shows;
+
 export const selectSelectedShow = (state: RootState) =>
   state.tvShows.selectedShow;
+
+export const selectTvShowsError = (state: RootState) => state.tvShows.error;
+
+export const selectTvShowsSearchStatus = (state: RootState) =>
+  state.tvShows.status;
 
 export default tvShowsSlice.reducer;

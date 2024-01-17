@@ -7,7 +7,7 @@ export const searchShows = async (query: string) => {
   return response.data;
 };
 
-export const singleSearchShow = async (query: string) => {
+export const getShowDetails = async (query: string) => {
   const response = await axios.get(`${API_URL}singlesearch/shows?q=${query}`);
   return response.data;
 };
