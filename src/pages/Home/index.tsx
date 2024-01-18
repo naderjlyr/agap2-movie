@@ -1,16 +1,12 @@
-import { FC } from "react";
+import TVShowCard from "../../features/tvShows/components/TVShowCard";
 import useTvShows from "../../hooks/useTvShows";
-import HeroSection from "../../features/tvShows/components/HeroSection";
 
-const Home: FC = () => {
-  const { selectedShow } = useTvShows("Powerpuff Girls");
-  console.log(selectedShow);
-
+const Home = () => {
+  const { selectedShow } = useTvShows();
   return (
-    <>
-      {selectedShow && <HeroSection showInfo={selectedShow} />}
-      <div>{selectedShow?.name}</div>
-    </>
+    <div className="p-4">
+      {selectedShow && <TVShowCard tvShow={selectedShow} />}
+    </div>
   );
 };
 

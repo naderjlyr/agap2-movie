@@ -1,22 +1,22 @@
-import React from "react";
-import EpisodeCard from "./EpisodeCard";
-import { Episode } from "../../../types/types";
+import React, { FC } from "react";
+import { useAppSelector } from "../../useAppSelector";
 
-interface SeasonCardProps {
-  seasonNumber: number;
-  episodes: Episode[];
-}
+const SeasonCard: FC = () => {
+  const selectedShow = useAppSelector((state) => state.tvShows.selectedShow);
 
-const SeasonCard: React.FC<SeasonCardProps> = ({ seasonNumber, episodes }) => {
+  if (!selectedShow?._embedded?.seasons) {
+    return null;
+  }
+
   return (
-    <div className="mb-8">
-      <h3 className="text-2xl font-bold mb-4">Season {seasonNumber}</h3>
-      <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-        {episodes.map((episode) => (
-          <EpisodeCard key={episode.id} episode={episode} />
-        ))}
-      </div>
-    </div>
+    <>
+      {selectedShow._embedded.seasons.map((season) => (
+        <div key={season.id} className="season-card">
+          <h4>Season {season.number}</h4>
+          {/* Render episodes */}
+        </div>
+      ))}
+    </>
   );
 };
 

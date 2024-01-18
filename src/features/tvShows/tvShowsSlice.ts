@@ -1,75 +1,56 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { AxiosError } from "axios";
+import axios from "axios";
 import { RootState } from "../store";
-import { Show, Episode, ShowSearchResult } from "../../types/types";
-import {
-  fetchTvShowBackgroundImageUrl,
-  getShowDetails,
-  searchShows,
-} from "../../services/tvMazeService";
+import { Show, ShowSearchResult } from "../../types/types";
+import { stripHtml } from "string-strip-html";
+
+const API_URL = process.env.REACT_APP_API_URL || "https://api.tvmaze.com/";
+
+export const searchShows = createAsyncThunk<ShowSearchResult[], string>(
+  "tvShows/searchShows",
+  async (query, { rejectWithValue }) => {
+    try {
+      const response = await axios.get(`${API_URL}search/shows?q=${query}`);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue("Failed to search shows");
+    }
+  },
+);
+
+export const fetchSingleShow = createAsyncThunk<Show, number>(
+  "tvShows/fetchSingleShow",
+  async (showId, { rejectWithValue }) => {
+    try {
+      const response = await axios.get(
+        `${API_URL}shows/${showId}?embed[]=seasons&embed[]=episodes`,
+      );
+      const showData: Show = response.data;
+      showData.summary = showData.summary
+        ? stripHtml(showData.summary).result
+        : "";
+      return showData;
+    } catch (error) {
+      return rejectWithValue("Failed to fetch show details");
+    }
+  },
+);
 
 interface TvShowsState {
-  shows: ShowSearchResult[];
+  searchResults: ShowSearchResult[];
   selectedShow: Show | null;
-  episodes: Episode[];
-  backgroundImages: Record<number, string | undefined>;
   status: "idle" | "loading" | "succeeded" | "failed";
   error: string | null;
   isDarkMode: boolean;
 }
 
 const initialState: TvShowsState = {
-  shows: [],
+  searchResults: [],
   selectedShow: null,
-  episodes: [],
-  backgroundImages: {},
   status: "idle",
   error: null,
   isDarkMode: false,
 };
-
-export const fetchShows = createAsyncThunk<ShowSearchResult[], string>(
-  "tvShows/fetchShows",
-  async (query: string, { rejectWithValue }) => {
-    try {
-      return await searchShows(query);
-    } catch (error) {
-      if (error instanceof AxiosError && error.response) {
-        return rejectWithValue({
-          message: error.message,
-          status: error.response.status,
-        });
-      }
-      return rejectWithValue({
-        message: "An unknown error occurred",
-        status: null,
-      });
-    }
-  },
-);
-
-export const fetchSingleShow = createAsyncThunk<Show, string | number>(
-  "tvShows/fetchSingleShow",
-  async (showIdentifier, { rejectWithValue }) => {
-    try {
-      let showDetails;
-      if (typeof showIdentifier === "number") {
-        showDetails = await getShowDetails(showIdentifier);
-      } else {
-        const searchResults = await searchShows(showIdentifier);
-        if (searchResults.length === 0) throw new Error("No shows found");
-        showDetails = searchResults[0].show;
-      }
-      const backgroundImageUrl = await fetchTvShowBackgroundImageUrl(
-        showDetails.id,
-      );
-      return { ...showDetails, backgroundImageUrl };
-    } catch (error) {
-      console.error("Error fetching show details or background image:", error);
-      return rejectWithValue(error);
-    }
-  },
-);
 
 export const tvShowsSlice = createSlice({
   name: "tvShows",
@@ -81,20 +62,16 @@ export const tvShowsSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(fetchShows.pending, (state) => {
+      .addCase(searchShows.pending, (state) => {
         state.status = "loading";
       })
-      .addCase(fetchShows.fulfilled, (state, action) => {
+      .addCase(searchShows.fulfilled, (state, action) => {
         state.status = "succeeded";
-        if (Array.isArray(action.payload)) {
-          state.shows = action.payload;
-        } else {
-          state.error = "Invalid data format received";
-        }
+        state.searchResults = action.payload;
       })
-      .addCase(fetchShows.rejected, (state, action) => {
+      .addCase(searchShows.rejected, (state, action) => {
         state.status = "failed";
-        state.error = action.error?.message || "Failed to fetch shows";
+        state.error = action.payload as string;
       })
       .addCase(fetchSingleShow.pending, (state) => {
         state.status = "loading";
@@ -105,18 +82,18 @@ export const tvShowsSlice = createSlice({
       })
       .addCase(fetchSingleShow.rejected, (state, action) => {
         state.status = "failed";
-        state.error = action.error?.message || "Failed to fetch single show";
+        state.error = action.payload as string;
       });
   },
 });
-export const selectTvShows = (state: RootState) => state.tvShows.shows;
 
+export const { toggleDarkMode } = tvShowsSlice.actions;
+
+export const selectSearchResults = (state: RootState) =>
+  state.tvShows.searchResults;
 export const selectSelectedShow = (state: RootState) =>
   state.tvShows.selectedShow;
-
 export const selectTvShowsError = (state: RootState) => state.tvShows.error;
-
-export const selectTvShowsSearchStatus = (state: RootState) =>
-  state.tvShows.status;
+export const selectTvShowsStatus = (state: RootState) => state.tvShows.status;
 
 export default tvShowsSlice.reducer;

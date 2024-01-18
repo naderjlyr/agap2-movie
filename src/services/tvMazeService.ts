@@ -1,5 +1,6 @@
 import axios from "axios";
 import { Show, ShowImageType, ShowSearchResult } from "../types/types";
+import { stripHtml } from "string-strip-html";
 
 const API_URL = process.env.REACT_APP_API_URL || "https://api.tvmaze.com/";
 
@@ -10,9 +11,20 @@ export const searchShows = async (
   return response.data;
 };
 
-export const getShowDetails = async (showId: number): Promise<Show> => {
-  const response = await axios.get(`${API_URL}shows/${showId}?embed=episodes`);
-  return response.data;
+export const getShowDetails = async (
+  showId: number,
+  embed?: string,
+): Promise<Show> => {
+  let url = `${API_URL}shows/${showId}`;
+  if (embed) {
+    url += `?embed=${embed}`;
+  }
+  const response = await axios.get(url);
+  const showData = response.data;
+  if (showData.summary) {
+    showData.summary = stripHtml(showData.summary).result;
+  }
+  return showData;
 };
 
 export const fetchTvShowBackgroundImageUrl = async (
@@ -23,7 +35,6 @@ export const fetchTvShowBackgroundImageUrl = async (
     const backgroundImages = response.data.filter(
       (img: ShowImageType) => img.type === "background",
     );
-    console.log("from service", backgroundImages);
     const mainBackgroundImage =
       backgroundImages.find((img: ShowImageType) => img.main) ||
       backgroundImages[0];

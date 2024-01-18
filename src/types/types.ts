@@ -12,6 +12,7 @@ export interface Show {
   summary: string;
   backgroundImageUrl?: string;
   _embedded?: {
+    seasons: Season[];
     episodes: Episode[];
   };
 }
@@ -55,6 +56,12 @@ export interface Episode {
   runtime: number;
   image: Image;
   summary: string;
+}
+
+export interface Season {
+  id: number;
+  number: number;
+  episodes: Episode[];
 }
 
 export interface ShowSearchResult {
