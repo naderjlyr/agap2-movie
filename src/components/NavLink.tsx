@@ -13,8 +13,8 @@ const NavLink: FC<NavLinkProps> = ({ href, title }) => {
       className={({ isActive }) =>
         `block text-lg py-3 px-4 transition-all duration-300 ${
           isActive
-            ? "bg-pink-500 text-white"
-            : "text-gray-300 hover:bg-gray-700"
+            ? "bg-pink-950 text-white"
+            : "text-gray-300 hover:bg-pink-900"
         }`
       }
     >

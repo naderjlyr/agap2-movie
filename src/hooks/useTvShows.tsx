@@ -1,21 +1,22 @@
 import { useEffect } from "react";
-import { useAppSelector } from "../features/useAppSelector";
 import {
   fetchSingleShow,
   selectSelectedShow,
 } from "../features/tvShows/tvShowsSlice";
+import { useAppSelector } from "../features/useAppSelector";
 import { useAppDispatch } from "../features/useAppDispatch";
 
-const useTvShows = () => {
+const useTvShows = (showId?: number) => {
   const selectedShow = useAppSelector(selectSelectedShow);
   const dispatch = useAppDispatch();
-  useEffect(() => {
-    dispatch(fetchSingleShow(1955));
-  }, [dispatch]);
 
-  return {
-    selectedShow,
-  };
+  useEffect(() => {
+    if (showId !== undefined) {
+      dispatch(fetchSingleShow(showId));
+    }
+  }, [showId, dispatch]);
+
+  return { selectedShow };
 };
 
 export default useTvShows;

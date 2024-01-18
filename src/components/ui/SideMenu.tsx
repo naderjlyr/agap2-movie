@@ -9,12 +9,13 @@ const SideMenu: FC = () => {
     return <div>Loading...</div>;
   }
   return (
-    <div className="w-2/5 flex flex-col justify-between h-screen bg-gray-950 py-4">
+    <div className="w-px-[500] flex flex-col justify-between h-screen bg-gray-950 py-4">
       <h4 className="text-white text-xl text-center font-bold px-4 mb-4">
         {selectedShow.name}
       </h4>
       <div className="flex-grow text-center flex flex-col justify-center">
-        <NavLink href={`/`} title="Details" />
+        {/*<NavLink href={`/`} title="Details" />*/}
+        <NavLink href={`/shows/${selectedShow.id}`} title="Details" />
         <NavLink href={`/shows/${selectedShow.id}/seasons`} title="Seasons" />
         <NavLink href={`/shows/${selectedShow.id}/episodes`} title="Episodes" />
       </div>

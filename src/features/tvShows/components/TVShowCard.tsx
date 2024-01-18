@@ -1,11 +1,11 @@
-import { FC } from "react";
+import React, { FC } from "react";
 import { Show } from "../../../types/types";
 import { FaHeart, FaPlay, FaCalendarAlt, FaClock } from "react-icons/fa";
 import { formatDate, getGenresString, getScheduleString } from "../../../utils";
-
-interface TVShowCardProps {
+import SeasonCard from "./SeasonCard";
+type TVShowCardProps = {
   tvShow: Show;
-}
+};
 
 const TVShowCard: FC<TVShowCardProps> = ({ tvShow }) => {
   return (
@@ -49,9 +49,13 @@ const TVShowCard: FC<TVShowCardProps> = ({ tvShow }) => {
           <div>Schedule: {getScheduleString(tvShow.schedule)}</div>
         </div>
         {/* Play Button */}
-        <button className="mt-4 inline-flex items-center justify-center bg-red-600 hover:bg-red-700 font-medium py-2 px-4 rounded-md transition duration-300">
+        <button className="mt-4 inline-flex items-center justify-center bg-pink-950 text-white hover:bg-pink-900 font-medium py-2 px-4 rounded-md transition duration-300">
           <FaPlay className="mr-2" /> Watch Trailer
         </button>
+        <div className="mt-4 flex flex-col">
+          <h4 className="text-2xl font-bold mb-4">Explore episodes</h4>
+          <SeasonCard compact={true} />
+        </div>
       </div>
     </div>
   );

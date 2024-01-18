@@ -1,35 +1,62 @@
-import React from "react";
-import { Episode } from "../../../types/types";
+import { FC, memo } from "react";
 import { Link } from "react-router-dom";
+import { Episode } from "../../../types/types";
+import { FaCalendarAlt } from "react-icons/fa";
+import { useAppSelector } from "../../useAppSelector";
 
 interface EpisodeCardProps {
   episode: Episode;
+  compact?: boolean;
 }
 
-const EpisodeCard: React.FC<EpisodeCardProps> = ({ episode }) => {
-  return (
-    <div className="max-w-xs rounded overflow-hidden shadow-lg">
-      <img
-        className="w-full aspect-w-16 aspect-h-9"
-        src={episode.image?.medium}
-        alt={episode.name}
-      />
-      <div className="px-6 py-4">
-        <div className="font-bold text-xl mb-2">{episode.name}</div>
-        <p className="text-gray-700 text-base">
-          {episode.summary.replace(/<[^>]+>/g, "")}
-        </p>
-      </div>
-      <div className="px-6 pt-4 pb-2">
-        <Link
-          to={`/episode/${episode.id}`}
-          className="inline-block bg-blue-500 rounded-full px-3 py-1 text-sm font-semibold text-white mr-2 mb-2"
-        >
-          Details
+const EpisodeCard: FC<EpisodeCardProps> = memo(
+  ({ episode, compact = false }) => {
+    const selectedShow = useAppSelector((state) => state.tvShows.selectedShow);
+
+    const imageClassNames = compact
+      ? "w-full h-16 object-cover rounded-lg"
+      : "w-full h-52 md:h-72 object-cover rounded-lg";
+
+    return (
+      <div className="group">
+        <Link to={`/shows/${selectedShow?.id}/episodes/${episode.id}`}>
+          <div className="relative">
+            <img
+              src={
+                episode.image?.original || "/path-to-default-episode-image.jpg"
+              }
+              alt={episode.name || "Episode thumbnail"}
+              className={imageClassNames}
+            />
+            <div className="absolute inset-0 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition duration-300 ease-in-out rounded-lg">
+              <div className="flex flex-col justify-end h-full p-4">
+                <span
+                  className={
+                    compact
+                      ? "text-xs text-center text-white"
+                      : "text-lg text-white font-semibold mb-2"
+                  }
+                >
+                  {episode.name || "Episode Title"}
+                </span>
+                {!compact && (
+                  <>
+                    <div className="text-white text-sm">
+                      <FaCalendarAlt className="inline-block mr-1" />
+                      {episode.airdate || "Unknown Date"}
+                    </div>
+                    <p className="text-white text-xs mt-2">
+                      {episode.summary || "No summary available."}
+                    </p>
+                  </>
+                )}
+              </div>
+            </div>
+          </div>
         </Link>
       </div>
-    </div>
-  );
-};
+    );
+  },
+);
 
 export default EpisodeCard;

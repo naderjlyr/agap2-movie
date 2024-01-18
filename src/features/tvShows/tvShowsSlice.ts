@@ -1,40 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import axios from "axios";
 import { RootState } from "../store";
 import { Show, ShowSearchResult } from "../../types/types";
-import { stripHtml } from "string-strip-html";
-
-const API_URL = process.env.REACT_APP_API_URL || "https://api.tvmaze.com/";
-
-export const searchShows = createAsyncThunk<ShowSearchResult[], string>(
-  "tvShows/searchShows",
-  async (query, { rejectWithValue }) => {
-    try {
-      const response = await axios.get(`${API_URL}search/shows?q=${query}`);
-      return response.data;
-    } catch (error) {
-      return rejectWithValue("Failed to search shows");
-    }
-  },
-);
-
-export const fetchSingleShow = createAsyncThunk<Show, number>(
-  "tvShows/fetchSingleShow",
-  async (showId, { rejectWithValue }) => {
-    try {
-      const response = await axios.get(
-        `${API_URL}shows/${showId}?embed[]=seasons&embed[]=episodes`,
-      );
-      const showData: Show = response.data;
-      showData.summary = showData.summary
-        ? stripHtml(showData.summary).result
-        : "";
-      return showData;
-    } catch (error) {
-      return rejectWithValue("Failed to fetch show details");
-    }
-  },
-);
+import { tvMazeService } from "../../services/tvMazeService";
 
 interface TvShowsState {
   searchResults: ShowSearchResult[];
@@ -49,9 +16,29 @@ const initialState: TvShowsState = {
   selectedShow: null,
   status: "idle",
   error: null,
-  isDarkMode: false,
+  isDarkMode: JSON.parse(localStorage.getItem("isDarkMode") || "false"),
 };
+export const searchShows = createAsyncThunk<ShowSearchResult[], string>(
+  "tvShows/searchShows",
+  async (query, { rejectWithValue }) => {
+    try {
+      return await tvMazeService.searchShows(query);
+    } catch (error) {
+      return rejectWithValue("Failed to search shows");
+    }
+  },
+);
 
+export const fetchSingleShow = createAsyncThunk<Show, number>(
+  "tvShows/fetchSingleShow",
+  async (showId, { rejectWithValue }) => {
+    try {
+      return await tvMazeService.getShowDetails(showId);
+    } catch (error) {
+      return rejectWithValue("Failed to fetch show details");
+    }
+  },
+);
 export const tvShowsSlice = createSlice({
   name: "tvShows",
   initialState,

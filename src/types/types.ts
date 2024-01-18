@@ -11,7 +11,7 @@ export interface Show {
   image: Image;
   summary: string;
   backgroundImageUrl?: string;
-  _embedded?: {
+  _embedded: {
     seasons: Season[];
     episodes: Episode[];
   };
