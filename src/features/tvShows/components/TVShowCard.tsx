@@ -14,14 +14,13 @@ const TVShowCard: FC<TVShowCardProps> = ({ tvShow }) => {
     window.open(youtubeUrl, "_blank");
   };
   return (
-    <div className="flex text-gray-400 dark:text-gray-700 flex-col justify-center md:flex-row bg-gray-900 p-20 dark:bg-gray-100 shadow-xl shadow-black rounded-lg">
-      <div className="w-2/6">
-        <img
-          src={tvShow.image?.original || "/poster-not-available.jpg"}
-          alt={tvShow.name}
-          className="  object-cover rounded-lg"
-        />
-      </div>
+    <div className="flex text-gray-400 dark:text-gray-700 flex-col justify-center md:flex-col lg:flex-row bg-gray-900 p-5 dark:bg-gray-100 shadow-xl shadow-black rounded-lg">
+      <img
+        src={tvShow.image?.original || "/poster-not-available.jpg"}
+        alt={tvShow.name}
+        className=" sm:w-3/6 md:w-2/6 lg:w-auto lg:h-96 2xl:h-full mx-auto object-cover rounded-lg"
+      />
+
       <div className="p-4  md:flex-1 md:p-8">
         <div className="flex flex-col mb-4">
           <div className={"flex justify-between"}>

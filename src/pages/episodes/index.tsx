@@ -26,7 +26,7 @@ const EpisodesPage = () => {
   );
 
   return (
-    <animated.div style={fade} className="bg-gray-950 p-20 dark:bg-gray-100">
+    <animated.div style={fade} className="bg-gray-950 p-50ark:bg-gray-100">
       <div className="container mx-auto">
         <h2 className="text-3xl font-bold mb-6 md:mb-12 text-pink-900">
           {selectedShowName} Episodes
