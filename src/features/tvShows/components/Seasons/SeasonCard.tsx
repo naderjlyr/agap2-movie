@@ -35,7 +35,7 @@ const SeasonCard: FC<SeasonCardProps> = ({ compact = false }) => {
         <div key={season.id} className="mb-8">
           <div className="grid grid-cols-4 gap-2">
             {!compact && (
-              <h4 className="text-xl font-semibold col-span-4">
+              <h4 className="text-xl font-semibold col-span-4 text-gray-400 dark:text-gray-700">
                 Season {season.number}
               </h4>
             )}

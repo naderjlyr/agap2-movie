@@ -2,7 +2,7 @@ import { FC, memo } from "react";
 import { Link } from "react-router-dom";
 import { Episode } from "../../../../types/types";
 import { FaCalendarAlt } from "react-icons/fa";
-import { stripTags } from "../../../../utils";
+import { stripTags, textShortener } from "../../../../utils";
 import { useAppSelector } from "../../../store";
 
 interface EpisodeCardProps {
@@ -33,13 +33,11 @@ const EpisodeCard: FC<EpisodeCardProps> = memo(
               Ep. {episode.number}
             </div>
             <div className="absolute inset-0 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition duration-300 ease-in-out rounded-lg dark:bg-opacity-70">
-              <div className="flex flex-col justify-end h-full p-4">
+              <div className="flex flex-col justify-end h-full p-2 md:p-4">
                 <span
-                  className={
-                    compact
-                      ? "text-xs text-center text-white"
-                      : "text-lg text-white font-semibold mb-2"
-                  }
+                  className={`${
+                    compact ? "text-xs" : "text-lg font-semibold mb-2"
+                  } text-center text-white`}
                 >
                   {episode.name || "Episode Title"}
                 </span>
@@ -50,7 +48,8 @@ const EpisodeCard: FC<EpisodeCardProps> = memo(
                       {episode.airdate || "Unknown Date"}
                     </div>
                     <p className="text-white text-xs mt-2">
-                      {stripTags(episode.summary) || "No summary available."}
+                      {textShortener(stripTags(episode.summary), 150) ||
+                        "No summary available."}
                     </p>
                   </>
                 )}
