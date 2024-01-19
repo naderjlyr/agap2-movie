@@ -23,7 +23,7 @@ const RelatedEpisodes: FC<RelatedEpisodesProps> = ({ title }) => {
 
   return (
     <div className="my-8">
-      <h3 className="text-2xl text-black dark:text-gray-600 font-bold mb-4">
+      <h3 className="text-2xl text-white dark:text-gray-600 font-bold mb-4">
         {title}
       </h3>
       <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">

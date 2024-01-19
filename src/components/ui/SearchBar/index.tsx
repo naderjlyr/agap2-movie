@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import { useTransition, animated } from "react-spring";
 import { useAppDispatch, useAppSelector } from "../../../features/store";
 
-const SearchBar: FC = () => {
+const Index: FC = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [debouncedSearchQuery] = useDebounce(searchQuery, 500);
   const dispatch = useAppDispatch();
@@ -80,4 +80,4 @@ const SearchBar: FC = () => {
   );
 };
 
-export default SearchBar;
+export default Index;

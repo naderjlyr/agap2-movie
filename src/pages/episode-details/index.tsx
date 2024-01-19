@@ -22,11 +22,11 @@ const EpisodeDetailsPage = () => {
   );
 
   return episode ? (
-    <>
+    <div className="bg-gray-800 p-20 dark:bg-white">
       <EpisodeDetailCard episode={episode} />
 
       <RelatedEpisodes title={`Other Episodes from Season ${episode.season}`} />
-    </>
+    </div>
   ) : (
     <div>Episode not found.</div>
   );
