@@ -2,19 +2,20 @@ import { NavLink as RRNavLink } from "react-router-dom";
 import { FC } from "react";
 
 interface NavLinkProps {
-  href: string;
-  title?: string;
+  to: string;
+  title: string;
 }
 
-const NavLink: FC<NavLinkProps> = ({ href, title }) => {
+const NavLink: FC<NavLinkProps> = ({ to, title }) => {
   return (
     <RRNavLink
-      to={href}
+      to={to}
+      end
       className={({ isActive }) =>
-        `block text-lg py-3 px-4 transition-all duration-300 ${
+        `block text-lg py-3 px-4 text-center w-full transition-all duration-300 ${
           isActive
             ? "bg-pink-950 text-white"
-            : "text-gray-300 hover:bg-pink-900"
+            : "text-gray-300 hover:bg-pink-900 hover:text-white"
         }`
       }
     >

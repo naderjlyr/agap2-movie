@@ -39,6 +39,18 @@ export const fetchSingleShow = createAsyncThunk<Show, number>(
     }
   },
 );
+
+export const fetchPopularShows = createAsyncThunk<Show[]>(
+  "tvShows/fetchPopularShows",
+  async (_, { rejectWithValue }) => {
+    try {
+      return await tvMazeService.getPopularShows();
+    } catch (error) {
+      return rejectWithValue("Failed to fetch popular shows");
+    }
+  },
+);
+
 export const tvShowsSlice = createSlice({
   name: "tvShows",
   initialState,
@@ -76,8 +88,6 @@ export const tvShowsSlice = createSlice({
 
 export const { toggleDarkMode } = tvShowsSlice.actions;
 
-export const selectSearchResults = (state: RootState) =>
-  state.tvShows.searchResults;
 export const selectSelectedShow = (state: RootState) =>
   state.tvShows.selectedShow;
 export const selectTvShowsError = (state: RootState) => state.tvShows.error;

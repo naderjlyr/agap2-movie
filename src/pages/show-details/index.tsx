@@ -13,7 +13,7 @@ const ShowDetailsPage: FC = () => {
   }
 
   return (
-    <div className="bg-gray-950 py-8">
+    <div className="bg-gray-950 p-20 dark:bg-gray-800">
       <TVShowCard tvShow={selectedShow} />
     </div>
   );

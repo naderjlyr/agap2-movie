@@ -14,23 +14,22 @@ export interface Show {
   _embedded: {
     seasons: Season[];
     episodes: Episode[];
+    cast: CastMember[];
   };
 }
-export interface ShowImageType {
-  id: number;
-  type: string;
-  main: boolean;
-  resolutions: {
-    original: ImageResolution;
-    medium?: ImageResolution;
+export interface CastMember {
+  person: {
+    id: number;
+    name: string;
+    image: Image | null;
+  };
+  character: {
+    id: number;
+    name: string;
+    image: Image | null;
   };
 }
 
-export interface ImageResolution {
-  url: string;
-  width: number;
-  height: number;
-}
 export interface Schedule {
   time: string;
   days: string[];

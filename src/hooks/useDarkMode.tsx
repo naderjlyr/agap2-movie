@@ -1,7 +1,6 @@
 import { useEffect } from "react";
-import { useAppSelector } from "../features/useAppSelector";
-import { useAppDispatch } from "../features/useAppDispatch";
 import { toggleDarkMode } from "../features/tvShows/tvShowsSlice";
+import { useAppDispatch, useAppSelector } from "../features/store";
 
 export const useDarkMode = () => {
   const isDarkMode = useAppSelector((state) => state.tvShows.isDarkMode);

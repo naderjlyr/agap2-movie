@@ -3,8 +3,7 @@ import {
   fetchSingleShow,
   selectSelectedShow,
 } from "../features/tvShows/tvShowsSlice";
-import { useAppSelector } from "../features/useAppSelector";
-import { useAppDispatch } from "../features/useAppDispatch";
+import { useAppDispatch, useAppSelector } from "../features/store";
 
 const useTvShows = (showId?: number) => {
   const selectedShow = useAppSelector(selectSelectedShow);

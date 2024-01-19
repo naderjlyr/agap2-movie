@@ -1,8 +1,8 @@
 import React, { FC } from "react";
-import { useAppSelector } from "../../useAppSelector";
 import { Link } from "react-router-dom";
-import { Episode } from "../../../types/types";
-import EpisodeCard from "./EpisodeCard";
+import { Episode } from "../../../../types/types";
+import EpisodeCard from "../Episodes/EpisodeCard";
+import { useAppSelector } from "../../../store";
 type SeasonCardProps = {
   compact?: boolean;
 };

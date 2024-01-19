@@ -1,8 +1,9 @@
 import { FC, memo } from "react";
 import { Link } from "react-router-dom";
-import { Episode } from "../../../types/types";
+import { Episode } from "../../../../types/types";
 import { FaCalendarAlt } from "react-icons/fa";
-import { useAppSelector } from "../../useAppSelector";
+import { stripTags } from "../../../../utils";
+import { useAppSelector } from "../../../store";
 
 interface EpisodeCardProps {
   episode: Episode;
@@ -14,7 +15,7 @@ const EpisodeCard: FC<EpisodeCardProps> = memo(
     const selectedShow = useAppSelector((state) => state.tvShows.selectedShow);
 
     const imageClassNames = compact
-      ? "w-full h-16 object-cover rounded-lg"
+      ? "w-full h-36 object-cover rounded-lg"
       : "w-full h-52 md:h-72 object-cover rounded-lg";
 
     return (
@@ -28,7 +29,10 @@ const EpisodeCard: FC<EpisodeCardProps> = memo(
               alt={episode.name || "Episode thumbnail"}
               className={imageClassNames}
             />
-            <div className="absolute inset-0 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition duration-300 ease-in-out rounded-lg">
+            <div className="absolute top-2 left-2 bg-black bg-opacity-70 text-white text-xs font-semibold px-2 py-1 rounded-md">
+              Ep. {episode.number}
+            </div>
+            <div className="absolute inset-0 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition duration-300 ease-in-out rounded-lg dark:bg-opacity-70">
               <div className="flex flex-col justify-end h-full p-4">
                 <span
                   className={
@@ -46,7 +50,7 @@ const EpisodeCard: FC<EpisodeCardProps> = memo(
                       {episode.airdate || "Unknown Date"}
                     </div>
                     <p className="text-white text-xs mt-2">
-                      {episode.summary || "No summary available."}
+                      {stripTags(episode.summary) || "No summary available."}
                     </p>
                   </>
                 )}

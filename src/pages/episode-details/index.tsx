@@ -1,28 +1,32 @@
 import { useParams } from "react-router-dom";
 import { useEffect } from "react";
-import { useAppDispatch } from "../../features/useAppDispatch";
 import { fetchSingleShow } from "../../features/tvShows/tvShowsSlice";
-import EpisodeDetailCard from "../../features/tvShows/components/EpisodeDetailCard";
-import { useAppSelector } from "../../features/useAppSelector";
+import EpisodeDetailCard from "../../features/tvShows/components/Episodes/EpisodeDetailCard";
+import RelatedEpisodes from "../../features/tvShows/components/Episodes/RelatedEpisodes";
+import { useAppDispatch, useAppSelector } from "../../features/store";
 
 const EpisodeDetailsPage = () => {
   const { id, episodeId } = useParams<{ id: string; episodeId: string }>();
   const dispatch = useAppDispatch();
   const selectedShow = useAppSelector((state) => state.tvShows.selectedShow);
+  const episodeIdNum = Number(episodeId);
 
   useEffect(() => {
-    if (id && !selectedShow) {
+    if (id && (!selectedShow || selectedShow.id !== parseInt(id))) {
       dispatch(fetchSingleShow(Number(id)));
     }
   }, [id, selectedShow, dispatch]);
 
-  const episodeIdNum = Number(episodeId);
   const episode = selectedShow?._embedded.episodes?.find(
-    (episode) => episode.id === episodeIdNum,
+    (ep) => ep.id === episodeIdNum,
   );
 
   return episode ? (
-    <EpisodeDetailCard episode={episode} />
+    <>
+      <EpisodeDetailCard episode={episode} />
+
+      <RelatedEpisodes title={`Other Episodes from Season ${episode.season}`} />
+    </>
   ) : (
     <div>Episode not found.</div>
   );
