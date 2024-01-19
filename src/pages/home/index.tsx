@@ -13,7 +13,7 @@ const HomePage = () => {
   }
 
   return (
-    <div className="bg-gray-800 p-20 dark:bg-white">
+    <div className="bg-gray-800 p-5 dark:bg-white">
       <TVShowCard tvShow={selectedShow} />
     </div>
   );

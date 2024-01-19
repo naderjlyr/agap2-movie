@@ -9,7 +9,7 @@ type EpisodeDetailCardProps = {
 
 const EpisodeDetailCard: FC<EpisodeDetailCardProps> = ({ episode }) => {
   return (
-    <div className="flex flex-col md:flex-row bg-gray-800 dark:bg-gray-100 text-gray-400 dark:text-gray-700">
+    <div className="w-full flex flex-col md:flex-row bg-gray-800 dark:bg-gray-100 text-gray-400 dark:text-gray-700">
       <div className="w-full md:flex-1">
         <img
           src={episode.image?.original || "/poster-not-available.jpg"}
