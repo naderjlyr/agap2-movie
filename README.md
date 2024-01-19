@@ -139,13 +139,3 @@ To run the application locally:
 4. Access the app at `http://localhost:3000`.
 
 
-
-## Developer
-
-Developed with ❤️ by Naderjlyr.
-
-For more information and contributions, please contact [Naderjlyr](mailto:naderjlyr@gmail.com).
-
----
-
-**Note**: This README is a high-level overview of the TV Shows Explorer app. It covers the primary components, features, and utilities. For detailed documentation, please refer to the code comments and documentation strings within the project.
