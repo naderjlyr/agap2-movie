@@ -14,7 +14,7 @@ const TVShowCard: FC<TVShowCardProps> = ({ tvShow }) => {
     window.open(youtubeUrl, "_blank");
   };
   return (
-    <div className="flex flex-col justify-center  md:flex-row dark:bg-gray-800">
+    <div className="flex text-gray-400 dark:text-gray-700 flex-col justify-center md:flex-row bg-gray-900 p-20 dark:bg-gray-100 shadow-xl shadow-black rounded-lg">
       <div className="w-2/6">
         <img
           src={tvShow.image?.original || "/poster-not-available.jpg"}
@@ -22,24 +22,35 @@ const TVShowCard: FC<TVShowCardProps> = ({ tvShow }) => {
           className="  object-cover rounded-lg"
         />
       </div>
-      <div className="p-4 md:flex-1 md:p-8">
+      <div className="p-4  md:flex-1 md:p-8">
         <div className="flex flex-col mb-4">
           <div className={"flex justify-between"}>
-            <h1 className={"text-4xl font-bold pb-2"}>{tvShow.name}</h1>
+            <h1
+              className={
+                "text-4xl text-gray-400 dark:text-gray-700 font-bold pb-2"
+              }
+            >
+              {tvShow.name}
+            </h1>
             <div className={"flex justify-center items-center"}>
               <FaHeart className="text-red-500 mr-2" />
               <span className="text-xl">{tvShow.rating.average}</span>
             </div>
           </div>
-          <div className="flex flex-row flex-nowrap justify-start gap-2 text-sm text-gray-400">
-            <span>{formatDate(tvShow.premiered)} | </span>
-            <span>{getGenresString(tvShow.genres)} | </span>
-            <span>{tvShow.runtime} min</span>
+          <div className="flex flex-row flex-nowrap justify-start gap-2 text-sm text-gray-400 dark:text-gray-700">
+            <span>
+              {formatDate(tvShow.premiered)} | {getGenresString(tvShow.genres)}|{" "}
+              {tvShow.runtime} min
+            </span>
           </div>
         </div>
-        <h5 className={"text-2xl font-bold pb-2"}>Details</h5>
+        <h5
+          className={"text-2xl font-bold pb-2 text-gray-400 dark:text-gray-700"}
+        >
+          Details
+        </h5>
         <p className="mt-4">{tvShow.summary}</p>
-        <div className="mt-4">
+        <div className="mt-4 text-gray-400 dark:text-gray-700">
           <div className="mb-2 flex items-center">
             <FaCalendarAlt className="mr-2" /> Premiered: {tvShow.premiered}
           </div>
@@ -56,12 +67,16 @@ const TVShowCard: FC<TVShowCardProps> = ({ tvShow }) => {
           <FaPlay className="mr-2" /> Watch Trailer
         </button>
         <div className="mt-4 flex flex-col">
-          <h4 className="text-2xl font-bold mb-4">Explore episodes</h4>
+          <h4 className="text-2xl font-bold mb-4 text-gray-400 dark:text-gray-700">
+            Explore episodes
+          </h4>
           <SeasonCard compact={true} />
         </div>
         <div className="mt-8 w-full">
-          <h4 className="text-2xl font-bold mb-4">Cast</h4>
-          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+          <h4 className="text-2xl font-bold mb-4 text-gray-400 dark:text-gray-700">
+            Cast
+          </h4>
+          <div className="grid text-gray-400 dark:text-gray-700 grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4 ">
             {tvShow?._embedded?.cast?.map((castMember) => (
               <div
                 key={`${castMember.person.id}-${castMember.character.id}`}
@@ -74,8 +89,12 @@ const TVShowCard: FC<TVShowCardProps> = ({ tvShow }) => {
                   alt={castMember.person.name}
                   className="rounded-full w-24 h-24 object-cover mx-auto"
                 />
-                <h5 className="mt-2 font-semibold">{castMember.person.name}</h5>
-                <p className="text-sm">{castMember.character.name}</p>
+                <h5 className="text-gray-400 dark:text-gray-700 mt-2 font-semibold">
+                  {castMember.person.name}
+                </h5>
+                <p className="text-gray-400 dark:text-gray-700 text-sm">
+                  {castMember.character.name}
+                </p>
               </div>
             ))}
           </div>

@@ -24,7 +24,7 @@ export const formatDate = (dateString: string): string => {
   const date = new Date(dateString);
   return date.toLocaleDateString("en-US", options);
 };
-export const textShortener = (text: string, maxLength: 30): string => {
+export const textShortener = (text: string, maxLength: 150): string => {
   return text.length > maxLength ? `${text.slice(0, maxLength)}...` : text;
 };
 export const groupEpisodesBySeason = (episodes: Episode[]) => {

@@ -33,7 +33,7 @@ const EpisodesPage = () => {
         </h2>
         {Object.entries(episodesBySeason).map(([seasonNumber, episodes]) => (
           <div key={seasonNumber}>
-            <h3 className="text-2xl text-white dark:text-gray-500 font-bold my-4">
+            <h3 className="text-2xl text-gray-400 dark:text-gray-700 font-bold my-4">
               Season {seasonNumber}
             </h3>
             <div className="grid grid-cols-2 md:grid-cols-5 lg:grid-cols-5 gap-6">
