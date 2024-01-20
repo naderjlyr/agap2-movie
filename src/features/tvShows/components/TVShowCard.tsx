@@ -18,7 +18,7 @@ const TVShowCard: FC<TVShowCardProps> = ({ tvShow }) => {
       <img
         src={tvShow.image?.original || "/poster-not-available.jpg"}
         alt={tvShow.name}
-        className=" sm:w-3/6 md:w-2/6 lg:w-auto lg:h-96 2xl:h-full mx-auto object-cover rounded-lg"
+        className=" sm:w-3/6 md:w-2/6 lg:w-96 lg:h-96 2xl:h-full mx-auto object-cover rounded-lg"
       />
 
       <div className="p-4  md:flex-1 md:p-8">
