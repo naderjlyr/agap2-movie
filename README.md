@@ -115,7 +115,6 @@ The application is structured into several key components and features, enhancin
 - **Redux Toolkit**: Manages the application's state, providing a predictable state container.
 - **Responsive Design**: Ensures a consistent user experience across various device sizes.
 - **Dark Mode**: Users can switch between light and dark themes for comfortable viewing.
-- **Infinite Scroll**: Implements infinite scrolling for episodes and seasons, enhancing user engagement.
 - **API Integration**: Utilizes the TVMaze API to fetch real-time data about TV shows, episodes, and casts.
 - **Error Handling**: Gracefully handles API errors and unexpected interruptions.
 - **Animated Transitions**: Implements subtle animations for smooth user experience transitions.
