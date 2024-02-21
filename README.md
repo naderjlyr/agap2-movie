@@ -1,5 +1,4 @@
-# agap2Movie-task-nj
-All the requested features are implemented:
+# simple-movie-app
 ###### Page 1:
 The TV show page should at least display the following information (you're free to add more):
 - [x] Show title
